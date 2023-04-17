@@ -43,7 +43,7 @@ class PublicUserApiTests(TestCase):
             'name': 'test name'
         }
         create_user(**payload)
-        res = self.client.request(CREATE_USER_URL, payload)
+        res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_password_too_short(self):
