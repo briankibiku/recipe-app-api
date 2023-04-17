@@ -18,14 +18,14 @@ class PublicUserApiTests(TestCase):
     """Test the public feature of the user API"""
 
     def setUp(self):
-        self.client = APIClient
+        self.client = APIClient()
 
     def test_create_user_success(self):
         """Test creating a user is sucessful"""
         payload = {
-            'email': 'example@mail.com',
-            'password': 'testpass1234',
-            'name': 'test name'
+            'email': 'test@example.com',
+            'password': 'testpass123',
+            'name': 'Test Name'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -35,23 +35,23 @@ class PublicUserApiTests(TestCase):
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
 
-    def test_user_with_email_exists(self):
+    def test_user_with_email_exists_error(self):
         """Test error returned when user added already exists"""
         payload = {
-            'email': 'example@mail.com',
-            'password': 'testpass1234',
-            'name': 'test name'
+            'email': 'test@example.com',
+            'password': 'testpass123',
+            'name': 'Test Name'
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_password_too_short(self):
+    def test_password_too_short_error(self):
         """Test an error is returned if password is less than 5 chars"""
         payload = {
-            'email': 'example1@mail.com',
+            'email': 'test@example.com',
             'password': 'pw',
-            'name': 'test name'
+            'name': 'Test name'
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
