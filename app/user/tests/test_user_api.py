@@ -146,9 +146,9 @@ class PrivateUserApiTets(TestCase):
         resp = self.client.patch(ME_URL, payload)
 
         self.user.refresh_from_db()
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(self.user.name, payload['name'])
-        self.assertEqual(self.user.check_password(payload['password']))
+        self.assertTrue(self.user.check_password(payload['password']))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
 
