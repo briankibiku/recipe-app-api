@@ -39,7 +39,7 @@ class PublicRecipeApiTests(TestCase):
         self.client = APIClient()
 
     def test_auth_required(self):
-        """Test auth is required to call API"""
+        """Test auth is required to call APIs"""
         res = self.client.get(RECIPES_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
