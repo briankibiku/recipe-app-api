@@ -41,7 +41,7 @@ class PublicRecipeApiTests(TestCase):
     def test_auth_required(self):
         """Test auth is required to call API"""
         res = self.client.get(RECIPES_URL)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 class PrivateRecipeApiTests(TestCase):
     def setUp(self):
@@ -59,13 +59,13 @@ class PrivateRecipeApiTests(TestCase):
 
         res = self.client.get(RECIPES_URL)
         recipes = Recipe.objects.all().order_by('-id')
-        serializers = RecipeSerializer(recipes, many=True)
+        serializer = RecipeSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializers.data)
+        self.assertEqual(res.data, serializer.data)
 
     def test_recipe_list_limited_to_user(self):
         """Test list of recipies is limited to authenitcated user"""
-        other_user = get_user_model().create_user(
+        other_user = get_user_model().objects.create_user(
             'other@example.com',
             'password1234'
         )
